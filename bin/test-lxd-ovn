@@ -459,8 +459,13 @@ lxc network create ovn-virtual-network --type=ovn network=dummy
 ovs-vsctl list-ports dummybr0 | grep patch-lxd-net | wc -l | grep 1 # Check bridge has an OVN patch port connected.
 ovnIPv4="$(lxc network get ovn-virtual-network volatile.network.ipv4.address)"
 ovnIPv6="$(lxc network get ovn-virtual-network volatile.network.ipv6.address)"
+
+lxc network show ovn-virtual-network
+ovn-nbctl show
+
 ping -c1 -4 "${ovnIPv4}" # Check IPv4 connectivity over dummy bridge to OVN router.
 ping -c1 -6 "${ovnIPv6}" # Check IPv6 connectivity over dummy bridge to OVN router.
+
 lxc network delete ovn-virtual-network
 lxc network delete dummy
 ovs-vsctl list-ports dummybr0 | grep patch-lxd-net | wc -l | grep 0 # Check bridge has no OVN patch port connected.
